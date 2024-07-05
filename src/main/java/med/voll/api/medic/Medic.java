@@ -27,6 +27,8 @@ public class Medic {
     @Embedded
     private Address address;
 
+    private Boolean active;
+
     public Medic(RegisterMedicDTO medicDTO) {
         this.name = medicDTO.name();
         this.email = medicDTO.email();
@@ -34,5 +36,25 @@ public class Medic {
         this.crm = medicDTO.crm();
         this.specialty = medicDTO.specialty();
         this.address = new Address(medicDTO.address());
+        this.active = true;
+    }
+
+    public void updateData(UpdateMedicDTO medicDTO) {
+        if (medicDTO.name() != null) {
+            this.name = medicDTO.name();
+        }
+
+        if (medicDTO.phone() != null) {
+            this.phone = medicDTO.phone();
+        }
+
+        if (medicDTO.address() != null) {
+            this.address.updateData(medicDTO.address());
+        }
+
+    }
+
+    public void delete() {
+        this.active = false;
     }
 }

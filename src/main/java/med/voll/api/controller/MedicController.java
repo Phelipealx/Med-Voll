@@ -2,10 +2,7 @@ package med.voll.api.controller;
 
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
-import med.voll.api.medic.ListMedicDTO;
-import med.voll.api.medic.Medic;
-import med.voll.api.medic.MedicRepository;
-import med.voll.api.medic.RegisterMedicDTO;
+import med.voll.api.medic.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -23,13 +20,27 @@ public class MedicController {
     private MedicRepository repository;
 
     @PostMapping
-//    @Transactional
+    @Transactional
     public void register(@RequestBody @Valid RegisterMedicDTO medicDTO) {
         repository.save(new Medic(medicDTO));
     }
 
     @GetMapping
     public Page<ListMedicDTO> list(@PageableDefault(size = 2, sort = {"name"}, direction = Sort.Direction.DESC) Pageable pageable) {
-        return repository.findAll(pageable).map(ListMedicDTO::new);
+        return repository.findAllByActiveTrue(pageable).map(ListMedicDTO::new);
+    }
+
+    @PutMapping
+    @Transactional
+    public void update(@RequestBody @Valid UpdateMedicDTO medicDTO) {
+        var medic = repository.getReferenceById(medicDTO.id());
+        medic.updateData(medicDTO);
+    }
+
+    @DeleteMapping("/{id}")
+    @Transactional
+    public void delete(@PathVariable Long id) {
+        var medic = repository.getReferenceById(id);
+        medic.delete();
     }
 }
