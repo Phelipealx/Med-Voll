@@ -7,7 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import med.voll.api.domain.address.Address;
 
-@Table(name = "patients")
+@Table(name = "patient")
 @Entity(name = "Patient")
 @Getter
 @NoArgsConstructor
